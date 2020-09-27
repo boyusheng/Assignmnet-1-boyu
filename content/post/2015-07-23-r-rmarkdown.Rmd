@@ -8,14 +8,7 @@ tags: ["R Markdown", "plot", "regression"]
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(collapse = TRUE)
-#install.packages("tidyverse")
-#install.packages("devtools")
-#devtools::install_github("hodgettsp/cesR")
-#install.packages("skimr")
-library(tidyverse)
-library(visdat)
-library(cesR)
-library(skimr)
+
 ```
 #Abstract
 
@@ -24,11 +17,11 @@ This piece of work uses the rmarkdown as a tool to develop the variables and obs
 
 #Introduction
 
-In the 2019 election, the survey showed that there is a outstanding support for the Conservative party yet the Conservatives still lost the election and obtained less seats in the parliament. Among those group people, I mainly focus the variable of year of birth and the federal party that they support. 
+In the 2019 election, the survey showed that the support for the Liberal and Conservative Party are approximately the same. Among those group people, I mainly focus the variable of year of birth and the federal party that they support. 
 
 In the graph, one thing that we can conclude is that the survey focused more on the people who are 40 years old or more and the statistics itself is biased.
 
-After the graph, there will be a general diccussion and the weakness that we encountered in this survey. 
+After the graph, there will be a general discussion and the weakness that we encountered in this survey. 
 
 
 ```{r download, warning=FALSE, message=FALSE}
@@ -49,7 +42,7 @@ head(ces2019_web)
 
 ces2019_web <-
   ces2019_web %>%
-  select(cps19_yob, pid_en)
+  select(cps19_yob, cps19_votechoice)
 
 ces2019_web <-
   ces2019_web %>%
@@ -57,11 +50,11 @@ ces2019_web <-
 
 
 
-#visdat::vis_dat(ces2019_web)
+visdat::vis_dat(ces2019_web)
 
-#skimr::skim(ces2019_web)
+skimr::skim(ces2019_web)
 
-#class(ces2019_web$ces_code)
+class(ces2019_web$ces_code)
 
 
 
@@ -70,14 +63,24 @@ ces2019_web <-
 ```{r}
 ces2019_web <-
   ces2019_web %>%
-  filter(! is.na(pid_en))
+  filter(! is.na(cps19_votechoice))
+
+ces2019_web %>% summarise(mean_yob = mean(cps19_yob), median_yob = median(cps19_yob))
 ```
+#Note
+
+mean of Year of Birth is 51.19 and the median of Year of Birth is 50. The group of people that the survey investigated mainly focused on elder people
+
 
 ```{r}
 
 ces2019_web %>%
-  ggplot(aes(x = pid_en)) + 
-  geom_bar()
+  ggplot(aes(x = cps19_votechoice)) + 
+  geom_histogram() +
+  labs(x = "voters' choice", y = "numbers", title = "Preferred party of the votes ", caption = "1=Liberal, 2=Conservative,
+       3=NDP, 4=Bloc, 5=Green, 6=People's Party, 7=Others, 9=Prefer not to say") 
+  
+
 
 ```
 
@@ -95,13 +98,13 @@ ces2019_web %>%
 
 # Discussion
 
-The sample mainly collected 37230 respondents in the survey and most of the people were born in the time period of 1930s-1970s and the outcome shows that they are most likely to consider themselves as Conservative. Liberal is the only competitive rival in the election. And the share of Green Party, NDP, Bloc and People's Party control relative small portions of polls in the election. 
+The sample mainly collected 37230 respondents in the survey and most of the people were born in the time period of 1930s-1970s and the outcome shows that the number of Liberal and Conservative supports are approximately the same. And the share of Green Party, NDP, Bloc and People's Party control relative small portions of polls in the election. Moreover, a large amount of people prefer not to say their choices.  
 
 
 
 # Weakness
 
-This sample only shows 37230 respondents and it is a relatively small amount compared to the whole population of 30 millions in Canada. Moreover, the sample neglected the people who were born after 1980s who can lead to a significant change in the result of the election. In fact, the Liberal Party has won the election possibly due to the number of the young voters. 
+This sample only shows 37230 respondents and it is a relatively small amount compared to the whole population of 30 millions in Canada. Moreover, the sample neglected the people who were born after 1980s who can lead to a significant change in the result of the election. Especially the large group of people who prefer not to tell their choices can be a huge uncertainty when the election comes.  
 
 
 #References
