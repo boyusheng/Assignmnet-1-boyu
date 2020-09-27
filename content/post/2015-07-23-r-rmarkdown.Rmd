@@ -1,7 +1,7 @@
 ---
 title: "Relationship between Age and the party people support "
 author: "Boyu Sheng"
-date: 2020-07-23T21:13:14-05:00
+date: 2020-09-27T21:13:14-05:00
 categories: ["R"]
 tags: ["R Markdown", "plot", "regression"]
 ---
